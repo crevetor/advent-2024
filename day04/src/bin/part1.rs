@@ -2,6 +2,7 @@ use std::env;
 use std::fs;
 use std::process;
 use matrix::Matrix;
+use anyhow::Result;
 
 fn read_input(filename: &str) -> Vec<String> {
     let mut ret: Vec<String> = Vec::new();
@@ -13,7 +14,7 @@ fn read_input(filename: &str) -> Vec<String> {
     ret
 }
 
-fn main() {
+fn main() -> Result<()> {
     let args: Vec<String> = env::args().collect();
     if args.len() != 2 {
         println!("Wrong number of args");
@@ -25,9 +26,9 @@ fn main() {
     let mut num_xmas = 0;
 
     for y in 0..mat.num_rows() {
-        let line = mat.row(y).unwrap().iter().collect::<String>();
-        let diag = mat.diag([0, y], [1, 1]).unwrap().iter().collect::<String>();
-        let other_diag = mat.diag([mat.num_cols() - 1, y], [-1, 1]).unwrap().iter().collect::<String>();
+        let line = mat.row(y)?.iter().collect::<String>();
+        let diag = mat.diag([0, y], [1, 1])?.iter().collect::<String>();
+        let other_diag = mat.diag([mat.num_cols() - 1, y], [-1, 1])?.iter().collect::<String>();
         println!("row {y}");
         println!("{line:?}");
         println!("{diag:?}");
@@ -40,9 +41,9 @@ fn main() {
         num_xmas += other_diag.chars().rev().collect::<String>().matches("XMAS").count();
     }
     for x in 0..mat.num_cols() {
-        let col = mat.col(x).unwrap().iter().collect::<String>();
-        let diag = mat.diag([x, 0], [1, 1]).unwrap().iter().collect::<String>();
-        let other_diag = mat.diag([x, 0], [-1, 1]).unwrap().iter().collect::<String>();
+        let col = mat.col(x)?.iter().collect::<String>();
+        let diag = mat.diag([x, 0], [1, 1])?.iter().collect::<String>();
+        let other_diag = mat.diag([x, 0], [-1, 1])?.iter().collect::<String>();
         println!("col {x}");
         println!("{col:?}");
         println!("{diag:?}");
@@ -57,4 +58,5 @@ fn main() {
         }
     }
     println!("{}", num_xmas);
+    Ok(())
 }

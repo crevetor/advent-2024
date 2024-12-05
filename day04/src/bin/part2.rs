@@ -28,8 +28,8 @@ fn main() -> Result<()> {
     for y in 1..mat.num_rows()-1 {
         for x in 1..mat.num_cols()-1 {
             let sub = mat.get_sub_matrix(x, y, [3,3])?;
-            let diag = sub.diag([0, 0], [1, 1]).unwrap();
-            let other_diag = sub.diag([2, 0], [-1, 1]).unwrap();
+            let diag = sub.diag([0, 0], [1, 1])?;
+            let other_diag = sub.diag([2, 0], [-1, 1])?;
             if (diag.iter().collect::<String>() == "MAS" || diag.iter().rev().collect::<String>() == "MAS") && (other_diag.iter().collect::<String>() == "MAS" || other_diag.iter().rev().collect::<String>() == "MAS") {
                 num_xmas += 1;
             }
