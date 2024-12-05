@@ -1,8 +1,8 @@
+use anyhow::Result;
+use matrix::Matrix;
 use std::env;
 use std::fs;
 use std::process;
-use matrix::Matrix;
-use anyhow::Result;
 
 fn read_input(filename: &str) -> Vec<String> {
     let mut ret: Vec<String> = Vec::new();
@@ -25,12 +25,16 @@ fn main() -> Result<()> {
     let mat = Matrix::new(contents.iter().map(|s| s.chars().collect()).collect());
     let mut num_xmas = 0;
 
-    for y in 1..mat.num_rows()-1 {
-        for x in 1..mat.num_cols()-1 {
-            let sub = mat.get_sub_matrix(x, y, [3,3])?;
+    for y in 1..mat.num_rows() - 1 {
+        for x in 1..mat.num_cols() - 1 {
+            let sub = mat.get_sub_matrix(x, y, [3, 3])?;
             let diag = sub.diag([0, 0], [1, 1])?;
             let other_diag = sub.diag([2, 0], [-1, 1])?;
-            if (diag.iter().collect::<String>() == "MAS" || diag.iter().rev().collect::<String>() == "MAS") && (other_diag.iter().collect::<String>() == "MAS" || other_diag.iter().rev().collect::<String>() == "MAS") {
+            if (diag.iter().collect::<String>() == "MAS"
+                || diag.iter().rev().collect::<String>() == "MAS")
+                && (other_diag.iter().collect::<String>() == "MAS"
+                    || other_diag.iter().rev().collect::<String>() == "MAS")
+            {
                 num_xmas += 1;
             }
         }

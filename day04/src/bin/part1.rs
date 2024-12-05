@@ -1,8 +1,8 @@
+use anyhow::Result;
+use matrix::Matrix;
 use std::env;
 use std::fs;
 use std::process;
-use matrix::Matrix;
-use anyhow::Result;
 
 fn read_input(filename: &str) -> Vec<String> {
     let mut ret: Vec<String> = Vec::new();
@@ -28,7 +28,10 @@ fn main() -> Result<()> {
     for y in 0..mat.num_rows() {
         let line = mat.row(y)?.iter().collect::<String>();
         let diag = mat.diag([0, y], [1, 1])?.iter().collect::<String>();
-        let other_diag = mat.diag([mat.num_cols() - 1, y], [-1, 1])?.iter().collect::<String>();
+        let other_diag = mat
+            .diag([mat.num_cols() - 1, y], [-1, 1])?
+            .iter()
+            .collect::<String>();
         println!("row {y}");
         println!("{line:?}");
         println!("{diag:?}");
@@ -36,9 +39,24 @@ fn main() -> Result<()> {
         num_xmas += line.matches("XMAS").count();
         num_xmas += diag.matches("XMAS").count();
         num_xmas += other_diag.matches("XMAS").count();
-        num_xmas += line.chars().rev().collect::<String>().matches("XMAS").count();
-        num_xmas += diag.chars().rev().collect::<String>().matches("XMAS").count();
-        num_xmas += other_diag.chars().rev().collect::<String>().matches("XMAS").count();
+        num_xmas += line
+            .chars()
+            .rev()
+            .collect::<String>()
+            .matches("XMAS")
+            .count();
+        num_xmas += diag
+            .chars()
+            .rev()
+            .collect::<String>()
+            .matches("XMAS")
+            .count();
+        num_xmas += other_diag
+            .chars()
+            .rev()
+            .collect::<String>()
+            .matches("XMAS")
+            .count();
     }
     for x in 0..mat.num_cols() {
         let col = mat.col(x)?.iter().collect::<String>();
@@ -49,12 +67,27 @@ fn main() -> Result<()> {
         println!("{diag:?}");
         println!("{other_diag:?}");
         num_xmas += col.matches("XMAS").count();
-        num_xmas += col.chars().rev().collect::<String>().matches("XMAS").count();
+        num_xmas += col
+            .chars()
+            .rev()
+            .collect::<String>()
+            .matches("XMAS")
+            .count();
         if x > 0 && x < mat.num_cols() - 1 {
             num_xmas += diag.matches("XMAS").count();
             num_xmas += other_diag.matches("XMAS").count();
-            num_xmas += diag.chars().rev().collect::<String>().matches("XMAS").count();
-            num_xmas += other_diag.chars().rev().collect::<String>().matches("XMAS").count();
+            num_xmas += diag
+                .chars()
+                .rev()
+                .collect::<String>()
+                .matches("XMAS")
+                .count();
+            num_xmas += other_diag
+                .chars()
+                .rev()
+                .collect::<String>()
+                .matches("XMAS")
+                .count();
         }
     }
     println!("{}", num_xmas);
