@@ -40,20 +40,20 @@ impl<T: Clone + PartialEq> Matrix<T> {
         }
     }
 
-    pub fn get(&self, x: usize, y: usize) -> Option<T> {
+    pub fn get(&self, x: usize, y: usize) -> Result<T> {
         if y >= self.contents.len() || x >= self.contents[0].len() {
-            return None;
+            bail!("index out of bounds");
         }
 
-        Some(self.contents[y][x].clone())
+        Ok(self.contents[y][x].clone())
     }
 
-    pub fn get_mut(&mut self, x: usize, y: usize) -> Option<&mut T> {
+    pub fn get_mut(&mut self, x: usize, y: usize) -> Result<&mut T> {
         if y >= self.contents.len() || x >= self.contents[0].len() {
-            return None;
+            bail!("index out of bounds");
         }
 
-        Some(&mut self.contents[y][x])
+        Ok(&mut self.contents[y][x])
     }
 
     pub fn set(&mut self, x: usize, y: usize, val: T) {
@@ -68,32 +68,32 @@ impl<T: Clone + PartialEq> Matrix<T> {
         self.contents[0].len()
     }
 
-    pub fn row(&self, idx: usize) -> Option<Vec<T>> {
+    pub fn row(&self, idx: usize) -> Result<Vec<T>> {
         if idx >= self.contents.len() {
-            return None;
+            bail!("Index out of bounds");
         }
 
-        Some(self.contents[idx].clone())
+        Ok(self.contents[idx].clone())
     }
 
-    pub fn col(&self, idx: usize) -> Option<Vec<T>> {
+    pub fn col(&self, idx: usize) -> Result<Vec<T>> {
         if idx >= self.contents[0].len() {
-            return None;
+            bail!("Index out of bounds");
         }
 
-        Some(self.contents.iter().map(|x| x[idx].clone()).collect())
+        Ok(self.contents.iter().map(|x| x[idx].clone()).collect())
     }
 
-    pub fn diag(&self, start: [usize; 2], dir: [isize; 2]) -> Option<Vec<T>> {
+    pub fn diag(&self, start: [usize; 2], dir: [isize; 2]) -> Result<Vec<T>> {
         if start[0] >= self.num_cols() || start[1] >= self.num_rows() {
-            return None;
+            bail!("Start index out of bounds");
         }
 
         let xs: Vec<usize> = if dir[0] == -1 { (0..=start[0]).rev().collect() } else { (start[0]..self.num_cols()).collect() };
         let ys: Vec<usize> = if dir[1] == -1 { (0..=start[1]).rev().collect() } else { (start[1]..self.num_rows()).collect() };
 
 
-        Some(xs.iter().zip(ys.iter()).map(|(x, y)| self.contents[*y][*x].clone()).collect())
+        Ok(xs.iter().zip(ys.iter()).map(|(x, y)| self.contents[*y][*x].clone()).collect())
     }
 
     pub fn insert_row(&mut self, idx: usize, content: Vec<T>) {
