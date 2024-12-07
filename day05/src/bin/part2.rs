@@ -1,5 +1,4 @@
 use anyhow::{bail, Context, Result};
-use std::cmp::Ordering;
 use std::collections::{HashMap, HashSet};
 use std::env;
 use std::fs;
