@@ -4,7 +4,7 @@ use anyhow::{bail, Result};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Matrix<T> {
-    contents: Vec<Vec<T>>,
+    pub contents: Vec<Vec<T>>,
 }
 
 impl<T: fmt::Display> fmt::Display for Matrix<T> {
