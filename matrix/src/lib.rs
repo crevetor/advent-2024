@@ -21,15 +21,9 @@ impl<T: fmt::Display> fmt::Display for Matrix<T> {
 
 impl<T: Clone> FromIterator<Vec<T>> for Matrix<T> {
     fn from_iter<I: IntoIterator<Item = Vec<T>>>(iter: I) -> Self {
-        let mut ret = Matrix {
-            contents: Vec::new(),
-        };
-
-        for elt in iter {
-            ret.contents.push(elt);
+        Matrix {
+            contents: iter.into_iter().collect(),
         }
-
-        ret
     }
 }
 
