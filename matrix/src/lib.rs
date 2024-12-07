@@ -1,6 +1,6 @@
+use anyhow::{bail, Result};
 use std::fmt;
 use std::iter::FromIterator;
-use anyhow::{bail, Result};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Matrix<T> {
@@ -83,11 +83,22 @@ impl<T: Clone + PartialEq> Matrix<T> {
             bail!("Start index out of bounds");
         }
 
-        let xs: Vec<usize> = if dir[0] == -1 { (0..=start[0]).rev().collect() } else { (start[0]..self.num_cols()).collect() };
-        let ys: Vec<usize> = if dir[1] == -1 { (0..=start[1]).rev().collect() } else { (start[1]..self.num_rows()).collect() };
+        let xs: Vec<usize> = if dir[0] == -1 {
+            (0..=start[0]).rev().collect()
+        } else {
+            (start[0]..self.num_cols()).collect()
+        };
+        let ys: Vec<usize> = if dir[1] == -1 {
+            (0..=start[1]).rev().collect()
+        } else {
+            (start[1]..self.num_rows()).collect()
+        };
 
-
-        Ok(xs.iter().zip(ys.iter()).map(|(x, y)| self.contents[*y][*x].clone()).collect())
+        Ok(xs
+            .iter()
+            .zip(ys.iter())
+            .map(|(x, y)| self.contents[*y][*x].clone())
+            .collect())
     }
 
     pub fn insert_row(&mut self, idx: usize, content: Vec<T>) {
@@ -131,15 +142,26 @@ impl<T: Clone + PartialEq> Matrix<T> {
     }
 
     pub fn get_sub_matrix(&self, x: usize, y: usize, size: [usize; 2]) -> Result<Matrix<T>> {
-        if size[0]%2 == 0 || size[1]%2 == 0 {
+        if size[0] % 2 == 0 || size[1] % 2 == 0 {
             bail!("Matrix sizes must not be even numbers.");
         }
 
-        if x < size[0]/2 || x > self.num_cols() - 1 - (size[0]/2) || y < size[1]/2 || y > self.num_rows() - 1 - (size[1]/2) {
-            bail!("A matrix of {} by {} cannot fit at ({x}, {y})", size[0], size[1]);
+        if x < size[0] / 2
+            || x > self.num_cols() - 1 - (size[0] / 2)
+            || y < size[1] / 2
+            || y > self.num_rows() - 1 - (size[1] / 2)
+        {
+            bail!(
+                "A matrix of {} by {} cannot fit at ({x}, {y})",
+                size[0],
+                size[1]
+            );
         }
 
-        Ok(Matrix::from_iter((y-(size[1]/2)..=y+(size[1]/2)).map(|y| self.row(y).unwrap()[x-(size[0]/2)..=x+(size[0]/2)].to_vec())))
+        Ok(Matrix::from_iter(
+            (y - (size[1] / 2)..=y + (size[1] / 2))
+                .map(|y| self.row(y).unwrap()[x - (size[0] / 2)..=x + (size[0] / 2)].to_vec()),
+        ))
     }
 
     pub fn get_neighbors_wraparound(&self, x: i32, y: i32) -> Vec<([i32; 2], T)> {
