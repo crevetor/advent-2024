@@ -1,6 +1,6 @@
 use anyhow::{bail, Context, Result};
 use itertools::Itertools;
-use macroquad::prelude::{IVec2, Rect, Vec2};
+use macroquad::prelude::{IVec2, Rect};
 use std::collections::HashMap;
 use std::env;
 use std::fs;
@@ -83,11 +83,6 @@ fn main() -> Result<()> {
 
     antenna_arrays.values().for_each(|a| println!("{:?}", a));
 
-    let antenna_positions: Vec<IVec2> =
-        antenna_arrays.values().fold(Vec::new(), |mut acc, array| {
-            acc.extend(array.antenna_pos.iter());
-            acc
-        });
     let bounds = Rect::new(0., 0., contents[0].len() as f32, contents.len() as f32);
     println!("{bounds:?}");
 
