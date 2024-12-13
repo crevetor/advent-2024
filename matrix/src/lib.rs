@@ -209,4 +209,16 @@ impl<T: Clone + PartialEq> Matrix<T> {
         }
         None
     }
+
+    pub fn find_all(&self, needle: T) -> Result<Vec<[usize; 2]>> {
+        let mut ret = Vec::new();
+        for y in 0..self.num_rows() {
+            for x in 0..self.num_cols() {
+                if self.get(x, y)? == needle {
+                    ret.push([x, y]);
+                }
+            }
+        }
+        Ok(ret)
+    }
 }
